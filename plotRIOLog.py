@@ -15,6 +15,9 @@ public key that is recognized by the RIO.
 
 # Matplotlib
 import matplotlib.pyplot as plt
+from matplotlib import style
+from matplotlib.ticker import FormatStrFormatter
+
 import csv
 
 # need a file dialog
@@ -157,9 +160,27 @@ with open(dest_file_path,'r') as csvfile:
          time_mark_dt_FBK.append(datetime.strptime(time_mark_string, "%H:%M:%S:%f"))
         
 
-# Plot it
+# Define the plots
 
-#plt.plot(time_mark_dt_SP, setpoint)
-plt.plot(time_mark_dt_FBK, feedback)
-#plt.plot(xaxis, setpoint, feedback)
+style.use('ggplot')
+style.use('dark_background')
+f, plt_arr = plt.subplots(4, sharex = True,figsize=(12,8))
+f.suptitle("RIO Log")
+
+# Setpoint
+plt_arr[0].plot(time_mark_dt_SP, setpoint, color='blue')
+plt_arr[0].set_title("Setpoint")
+
+# Feedback
+plt_arr[1].plot(time_mark_dt_FBK, feedback, color='red')
+plt_arr[1].set_title("Feedback")
+
+# Error
+plt_arr[2].plot(time_mark_dt_ERR, error, color='green')
+plt_arr[2].set_title("Error")
+
+# Motor output
+plt_arr[3].plot(time_mark_dt_CV, output, color='orange')
+plt_arr[3].set_title("Motor Output")
+
 plt.show()
