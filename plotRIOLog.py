@@ -35,6 +35,7 @@ import getopt
 
 # Globals
 load_file = False
+file_supplied = False
 
 def usage():
    print("Don't be a dummy, dummy!")
@@ -75,6 +76,7 @@ def reformat(s):
    return value
 
 # Parse the arguments too see what to do 
+# -f /home/dcohen/Dropbox/Public/frc/programming_2022/data/Logging_20220415_182833.txt
 try:
     opts, args = getopt.getopt(sys.argv[1:], 'lf:h', ['load', 'file=', 'help'])
 except getopt.GetoptError:
@@ -88,18 +90,20 @@ for opt, arg in opts:
     elif opt in ('-l', '--load'):
         load_file = True
     elif opt in ('-f', '--file'):
-        file = arg
+        load_file = True
+        file_supplied = True
+        dest_file_path = arg
     else:
         load_file = False # User wants to connect to RIO
 
 
 # A file was specified on the command line
-if load_file:
+if load_file and not file_supplied:
    root = tk.Tk()
    root.withdraw()
    dest_file_path = filedialog.askopenfilename()
 # Getting the Logging.txt file from the RIO instead
-else: 
+elif not load_file and not file_supplied: 
    file = "Logging.txt"
    dest_path = "/home/dcohen/tmp/"
    #dest_path = "/home/dcohen/Dropbox/Public/frc/programming_2022/data/"
